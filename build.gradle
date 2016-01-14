@@ -1,0 +1,28 @@
+apply plugin: 'scala'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+applicationName = "kaalis"
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(ScalaCompile) {
+  scalaCompileOptions.useAnt = false
+}
+ 
+dependencies {
+  compile "org.scala-lang:scala-library:$scalaV"
+  compile group: "com.typesafe.akka", name: 'akka-actor_2.11', version: "${akkaV}"
+  compile group: "com.typesafe.akka", name: "akka-http-spray-json-experimental_2.11", version: "${akkaStreamV}"
+  compile group: "com.typesafe.akka", name: "akka-http-testkit-experimental_2.11", version: "${akkaStreamV}"
+  testCompile group: "org.scalatest", name: "scalatest_2.11", version: "${scalaTestV}"
+}
+
+mainClassName = "com.jalarbee.kaalis.Boot"
+task stage(dependsOn: ['clean', 'installApp'])
+
+jar {
+   from sourceSets.main.allScala 
+}
